@@ -799,7 +799,7 @@ export class ExcelService {
     this.createCell({
       worksheet,
       cellLocation: 'O14',
-      cellData: 'check',
+      cellData: '',
       styles: {
         ...cellStyles,
         border: {
