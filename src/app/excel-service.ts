@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Alignment,
+  Border,
   Cell,
   Font,
   Style,
@@ -41,8 +42,11 @@ export class ExcelService {
   }
   async customExcel() {
     const workbook: Workbook = new Workbook();
-    const worksheet: Worksheet = workbook.addWorksheet('Test');
-
+    const worksheet: Worksheet = workbook.addWorksheet('Test', {
+      pageSetup: {
+        showGridLines: false,
+      },
+    });
     // Add title Row
     const titleFont: Partial<Font> = {
       name: 'Arial',
@@ -67,6 +71,12 @@ export class ExcelService {
       styles: titleStyles,
     });
 
+    const thinBlackBorderStyle: Partial<Border> = {
+      style: 'thin',
+      color: {
+        argb: '#000000',
+      },
+    };
     // operation Number row
     const cellStyles: Partial<Style> = {
       font: {
@@ -78,9 +88,13 @@ export class ExcelService {
         horizontal: 'right',
         vertical: 'middle',
       },
+      border: {
+        top: thinBlackBorderStyle,
+        left: thinBlackBorderStyle,
+        bottom: thinBlackBorderStyle,
+        right: thinBlackBorderStyle,
+      },
     };
-
-   
 
     /* Row 4 and Row 5 */
     worksheet.mergeCells('A4:C5');
@@ -202,7 +216,7 @@ export class ExcelService {
       cellData: '',
       styles: cellStyles,
     });
-
+    /* Row 4 and Row 5  end*/
 
     /* Row 6 & 7 */
     worksheet.mergeCells('A6:C7');
@@ -353,8 +367,432 @@ export class ExcelService {
       cellData: '',
       styles: cellStyles,
     });
+    /* Row 6 & 7 end*/
 
-    
+    /* Row 8 & 9 */
+    worksheet.mergeCells('A8:C9');
+    worksheet.mergeCells('D8:M9');
+    worksheet.mergeCells('N8:N15');
+    worksheet.mergeCells('O8:Q8');
+    worksheet.mergeCells('O9:Q9');
+    worksheet.mergeCells('R8:S8');
+    worksheet.mergeCells('R9:S9');
+    worksheet.mergeCells('T8:U8');
+    worksheet.mergeCells('T9:U9');
+    worksheet.mergeCells('V8:W8');
+    worksheet.mergeCells('V9:W9');
+    worksheet.mergeCells('X8:Y8');
+    worksheet.mergeCells('X9:Y9');
+    worksheet.mergeCells('Z8:AA8');
+    worksheet.mergeCells('Z9:AA9');
+    // PPE Requirements
+    this.createCell({
+      worksheet,
+      cellLocation: 'A8',
+      cellData: 'PPE Requirements',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'D8',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    // Senior Supervisor (1)
+    this.createCell({
+      worksheet,
+      cellLocation: 'O8',
+      cellData: 'Senior Supervisor (1)',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'R8',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'T8',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'V8',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'X8',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'Z8',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    // Senior Supervisor (2)
+    this.createCell({
+      worksheet,
+      cellLocation: 'O9',
+      cellData: 'Senior Supervisor (2)',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'R9',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'T9',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'V9',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'X9',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'Z9',
+      cellData: '',
+      styles: cellStyles,
+    });
+    /* Row 8 & 9 end*/
+
+    /* Row 10 & 11 */
+    worksheet.mergeCells('A10:C11');
+    worksheet.mergeCells('D10:M11');
+    worksheet.mergeCells('O10:P10');
+    worksheet.mergeCells('O11:P11');
+    worksheet.mergeCells('R10:S10');
+    worksheet.mergeCells('R11:S11');
+    worksheet.mergeCells('T10:U10');
+    worksheet.mergeCells('T11:U11');
+    worksheet.mergeCells('V10:W10');
+    worksheet.mergeCells('V11:W11');
+    worksheet.mergeCells('X10:Y10');
+    worksheet.mergeCells('X11:Y11');
+    worksheet.mergeCells('Z10:AA10');
+    worksheet.mergeCells('Z11:AA11');
+    // Jigs / Tools / Facility
+    this.createCell({
+      worksheet,
+      cellLocation: 'A10',
+      cellData: 'Jigs / Tools / Facility',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'D10',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    // Supervisor (1)
+    this.createCell({
+      worksheet,
+      cellLocation: 'O10',
+      cellData: 'Supervisor',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'Q10',
+      cellData: '(1)',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'R10',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'T10',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'V10',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'X10',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'Z10',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    // Supervisor (2)
+    this.createCell({
+      worksheet,
+      cellLocation: 'O11',
+      cellData: 'Supervisor',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'Q11',
+      cellData: '(2)',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'R11',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'T11',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'V11',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'X11',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'Z11',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    /* Row 10 & 11 end*/
+
+    /* Row 12 & 13 */
+    worksheet.mergeCells('A12:C13');
+    worksheet.mergeCells('D12:M13');
+    worksheet.mergeCells('O12:P12');
+    worksheet.mergeCells('O13:P13');
+    worksheet.mergeCells('R12:S12');
+    worksheet.mergeCells('R13:S13');
+    worksheet.mergeCells('T12:U12');
+    worksheet.mergeCells('T13:U13');
+    worksheet.mergeCells('V12:W12');
+    worksheet.mergeCells('V13:W13');
+    worksheet.mergeCells('X12:Y12');
+    worksheet.mergeCells('X13:Y13');
+    worksheet.mergeCells('Z12:AA12');
+    worksheet.mergeCells('Z13:AA13');
+    // Significant Hazards
+    this.createCell({
+      worksheet,
+      cellLocation: 'A12',
+      cellData: 'Significant Hazards',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'D12',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    // Supervisor (3)
+    this.createCell({
+      worksheet,
+      cellLocation: 'O12',
+      cellData: 'Supervisor',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'Q12',
+      cellData: '(3)',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'R12',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'T12',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'V12',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'X12',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'Z12',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    // Supervisor (4)
+    this.createCell({
+      worksheet,
+      cellLocation: 'O13',
+      cellData: 'Supervisor',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'Q13',
+      cellData: '(4)',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'R13',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'T13',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'V13',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'X13',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'Z13',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    /* Row 12 & 13 end*/
+
+    /* Row 14 & 15 */
+    worksheet.mergeCells('A14:C15');
+    worksheet.mergeCells('D14:M15');
+    worksheet.mergeCells('O14:AA15');
+    // Materails Used
+    this.createCell({
+      worksheet,
+      cellLocation: 'A14',
+      cellData: 'Materails Used',
+      styles: cellStyles,
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'D14',
+      cellData: '',
+      styles: cellStyles,
+    });
+
+    // Revision signatory
+    this.createCell({
+      worksheet,
+      cellLocation: 'N8',
+      cellData: 'Revision signatory',
+      styles: {
+        ...cellStyles,
+        alignment: {
+          horizontal: 'center',
+          vertical: 'middle',
+          wrapText: true,
+          textRotation: 90,
+        },
+      },
+    });
+
+    this.createCell({
+      worksheet,
+      cellLocation: 'O14',
+      cellData: '',
+      styles: cellStyles,
+    });
+    /* Row 14 & 15 end*/
 
     workbook.xlsx.writeBuffer().then((data: any) => {
       const blob = new Blob([data], {
