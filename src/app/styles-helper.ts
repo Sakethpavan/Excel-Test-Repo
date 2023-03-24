@@ -57,3 +57,17 @@ export const centerAlignedCellStyles: Partial<Style> = {
     vertical: 'middle',
   },
 };
+
+export const tableHeaderCellStyles: Partial<Style> = {
+  ...cellStyles,
+  font: {
+    name: 'Arial',
+    size: 14,
+    bold: true,
+  },
+  alignment: {
+    horizontal: 'center',
+    vertical: 'middle',
+  },
+};
+

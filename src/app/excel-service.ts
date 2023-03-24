@@ -5,6 +5,7 @@ import {
   cellStyles,
   centerAlignedCellStyles,
   rightAlignedCellStyles,
+  tableHeaderCellStyles,
   titleStyles,
 } from './styles-helper';
 type CellProperties = {
@@ -55,7 +56,7 @@ export class ExcelService {
         showGridLines: false,
       },
     });
-    
+
     // Row 1 to 3 title
     this.generateTitle(worksheet);
 
@@ -703,11 +704,11 @@ export class ExcelService {
     worksheet.mergeCells('A14:C15');
     worksheet.mergeCells('D14:M15');
     worksheet.mergeCells('O14:AA15');
-    // Materails Used
+    // Materials Used
     this.createCell({
       worksheet,
       cellLocation: 'A14',
-      cellData: 'Materails Used',
+      cellData: 'Materials Used',
       styles: rightAlignedCellStyles,
     });
 
@@ -773,5 +774,48 @@ export class ExcelService {
     });
   }
 
-  generateTable(worksheet: Worksheet, data?: any) {}
+  generateTable(worksheet: Worksheet, data?: any) {
+    worksheet.mergeCells('B16:F16');
+    worksheet.mergeCells('H16:L16');
+    worksheet.mergeCells('M16:AA16');
+    // No
+    this.createCell({
+      worksheet,
+      cellLocation: 'A16',
+      cellData: 'No',
+      styles: tableHeaderCellStyles,
+    });
+
+    // Main Steps
+    this.createCell({
+      worksheet,
+      cellLocation: 'B16',
+      cellData: 'Main Steps',
+      styles: tableHeaderCellStyles,
+    });
+
+    // Time
+    this.createCell({
+      worksheet,
+      cellLocation: 'G16',
+      cellData: 'Time',
+      styles: tableHeaderCellStyles,
+    });
+
+    // Key Points and (Reasons)
+    this.createCell({
+      worksheet,
+      cellLocation: 'H16',
+      cellData: 'Key Points and (Reasons)',
+      styles: tableHeaderCellStyles,
+    });
+
+    // Operation Routes \ Illustrations \ Specifications
+    this.createCell({
+      worksheet,
+      cellLocation: 'M16',
+      cellData: 'Operation Routes \\ Illustrations \\ Specifications',
+      styles: tableHeaderCellStyles,
+    });
+  }
 }
