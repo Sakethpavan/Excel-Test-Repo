@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-import {
-  Alignment,
-  Border,
-  Cell,
-  Font,
-  Style,
-  Workbook,
-  Worksheet,
-} from 'exceljs';
+import { Border, Cell, Style, Workbook, Worksheet } from 'exceljs';
 import * as fs from 'file-saver';
+import {
+  cellStyles,
+  centerAlignedCellStyles,
+  rightAlignedCellStyles,
+  titleStyles,
+} from './styles-helper';
 type CellProperties = {
   worksheet: Worksheet;
   cellLocation: string;
@@ -40,29 +38,8 @@ export class ExcelService {
     }
     return cell;
   }
-  async customExcel() {
-    const workbook: Workbook = new Workbook();
-    const worksheet: Worksheet = workbook.addWorksheet('Test', {
-      pageSetup: {
-        showGridLines: false,
-      },
-    });
-    // Add title Row
-    const titleFont: Partial<Font> = {
-      name: 'Arial',
-      size: 26,
-      bold: true,
-      underline: true,
-    };
-    const titleAlignment: Partial<Alignment> = {
-      horizontal: 'center',
-      vertical: 'middle',
-    };
-    const titleStyles: Partial<Style> = {
-      font: titleFont,
-      alignment: titleAlignment,
-    };
 
+  generateTitle(worksheet: Worksheet) {
     worksheet.mergeCells('A1:AA3');
     this.createCell({
       worksheet,
@@ -70,47 +47,17 @@ export class ExcelService {
       cellData: 'Standard Operation Sheet - Procedure',
       styles: titleStyles,
     });
-
-    const thinBlackBorderStyle: Partial<Border> = {
-      style: 'thin',
-      color: {
-        argb: 'FF000000',
+  }
+  async customExcel() {
+    const workbook: Workbook = new Workbook();
+    const worksheet: Worksheet = workbook.addWorksheet('Test', {
+      pageSetup: {
+        showGridLines: false,
       },
-    };
-
-    const cellStyles: Partial<Style> = {
-      font: {
-        name: 'Arial',
-        size: 10,
-        bold: true,
-      },
-      alignment: {
-        horizontal: 'left',
-        vertical: 'middle',
-      },
-      border: {
-        top: thinBlackBorderStyle,
-        left: thinBlackBorderStyle,
-        bottom: thinBlackBorderStyle,
-        right: thinBlackBorderStyle,
-      },
-    };
-
-    const rightAlignedCellStyles: Partial<Style> = {
-      ...cellStyles,
-      alignment: {
-        horizontal: 'right',
-        vertical: 'middle',
-      },
-    };
-
-    const centerAlignedCellStyles: Partial<Style> = {
-      ...cellStyles,
-      alignment: {
-        horizontal: 'center',
-        vertical: 'middle',
-      },
-    };
+    });
+    
+    // Row 1 to 3 title
+    this.generateTitle(worksheet);
 
     /* Row 4 and Row 5 */
     worksheet.mergeCells('A4:C5');
@@ -815,6 +762,9 @@ export class ExcelService {
     });
     /* Row 14 & 15 end*/
 
+    /* Row 16 */
+    this.generateTable(worksheet);
+    /* Row 16 end*/
     workbook.xlsx.writeBuffer().then((data: any) => {
       const blob = new Blob([data], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -822,4 +772,6 @@ export class ExcelService {
       fs.saveAs(blob, 'Client.xlsx');
     });
   }
+
+  generateTable(worksheet: Worksheet, data?: any) {}
 }
