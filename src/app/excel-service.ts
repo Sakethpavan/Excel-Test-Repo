@@ -74,10 +74,10 @@ export class ExcelService {
     const thinBlackBorderStyle: Partial<Border> = {
       style: 'thin',
       color: {
-        argb: '#000000',
+        argb: 'FF000000',
       },
     };
-    // operation Number row
+
     const cellStyles: Partial<Style> = {
       font: {
         name: 'Arial',
@@ -85,7 +85,7 @@ export class ExcelService {
         bold: true,
       },
       alignment: {
-        horizontal: 'right',
+        horizontal: 'left',
         vertical: 'middle',
       },
       border: {
@@ -93,6 +93,22 @@ export class ExcelService {
         left: thinBlackBorderStyle,
         bottom: thinBlackBorderStyle,
         right: thinBlackBorderStyle,
+      },
+    };
+
+    const rightAlignedCellStyles: Partial<Style> = {
+      ...cellStyles,
+      alignment: {
+        horizontal: 'right',
+        vertical: 'middle',
+      },
+    };
+
+    const centerAlignedCellStyles: Partial<Style> = {
+      ...cellStyles,
+      alignment: {
+        horizontal: 'center',
+        vertical: 'middle',
       },
     };
 
@@ -118,7 +134,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'A4',
       cellData: 'Operator Number',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
@@ -134,7 +150,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'L4',
       cellData: 'Primary or Secondary',
-      styles: cellStyles,
+      styles: centerAlignedCellStyles,
     });
 
     this.createCell({
@@ -149,7 +165,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'R4',
       cellData: 'Prepared By',
-      styles: cellStyles,
+      styles: centerAlignedCellStyles,
     });
 
     this.createCell({
@@ -164,13 +180,13 @@ export class ExcelService {
       worksheet,
       cellLocation: 'V4',
       cellData: 'Applied Model',
-      styles: cellStyles,
+      styles: centerAlignedCellStyles,
     });
 
     this.createCell({
       worksheet,
       cellLocation: 'X4',
-      cellData: '**Applied Model Value ***',
+      cellData: '',
       styles: cellStyles,
     });
 
@@ -179,7 +195,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'N5',
       cellData: 'Revision Date',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
@@ -242,27 +258,12 @@ export class ExcelService {
       worksheet,
       cellLocation: 'A6',
       cellData: 'Operator Description',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
       worksheet,
       cellLocation: 'D6',
-      cellData: 'Some operator description',
-      styles: cellStyles,
-    });
-
-    // Time to Master
-    this.createCell({
-      worksheet,
-      cellLocation: 'K6',
-      cellData: 'Time to Master',
-      styles: cellStyles,
-    });
-
-    this.createCell({
-      worksheet,
-      cellLocation: 'L6',
       cellData: '',
       styles: cellStyles,
     });
@@ -272,13 +273,13 @@ export class ExcelService {
       worksheet,
       cellLocation: 'K6',
       cellData: 'Time to Master',
-      styles: cellStyles,
+      styles: centerAlignedCellStyles,
     });
 
     this.createCell({
       worksheet,
       cellLocation: 'L6',
-      cellData: 'Sometime to master',
+      cellData: '',
       styles: cellStyles,
     });
 
@@ -287,7 +288,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'N6',
       cellData: 'Issue Number',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
@@ -330,7 +331,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'N7',
       cellData: 'Revision Detail',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
@@ -390,7 +391,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'A8',
       cellData: 'PPE Requirements',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
@@ -405,7 +406,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'O8',
       cellData: 'Senior Supervisor (1)',
-      styles: cellStyles,
+      styles: centerAlignedCellStyles,
     });
 
     this.createCell({
@@ -448,7 +449,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'O9',
       cellData: 'Senior Supervisor (2)',
-      styles: cellStyles,
+      styles: centerAlignedCellStyles,
     });
 
     this.createCell({
@@ -507,7 +508,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'A10',
       cellData: 'Jigs / Tools / Facility',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
@@ -522,14 +523,14 @@ export class ExcelService {
       worksheet,
       cellLocation: 'O10',
       cellData: 'Supervisor',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
       worksheet,
       cellLocation: 'Q10',
       cellData: '(1)',
-      styles: cellStyles,
+      styles: centerAlignedCellStyles,
     });
 
     this.createCell({
@@ -572,14 +573,14 @@ export class ExcelService {
       worksheet,
       cellLocation: 'O11',
       cellData: 'Supervisor',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
       worksheet,
       cellLocation: 'Q11',
       cellData: '(2)',
-      styles: cellStyles,
+      styles: centerAlignedCellStyles,
     });
 
     this.createCell({
@@ -639,7 +640,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'A12',
       cellData: 'Significant Hazards',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
@@ -654,14 +655,14 @@ export class ExcelService {
       worksheet,
       cellLocation: 'O12',
       cellData: 'Supervisor',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
       worksheet,
       cellLocation: 'Q12',
       cellData: '(3)',
-      styles: cellStyles,
+      styles: centerAlignedCellStyles,
     });
 
     this.createCell({
@@ -704,14 +705,14 @@ export class ExcelService {
       worksheet,
       cellLocation: 'O13',
       cellData: 'Supervisor',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
       worksheet,
       cellLocation: 'Q13',
       cellData: '(4)',
-      styles: cellStyles,
+      styles: centerAlignedCellStyles,
     });
 
     this.createCell({
@@ -760,7 +761,7 @@ export class ExcelService {
       worksheet,
       cellLocation: 'A14',
       cellData: 'Materails Used',
-      styles: cellStyles,
+      styles: rightAlignedCellStyles,
     });
 
     this.createCell({
@@ -783,14 +784,34 @@ export class ExcelService {
           wrapText: true,
           textRotation: 90,
         },
+        border: {
+          ...cellStyles.border,
+          right: {
+            style: 'thin',
+            color: {
+              argb: 'FFFFFFFF',
+            },
+          },
+        },
       },
     });
 
     this.createCell({
       worksheet,
       cellLocation: 'O14',
-      cellData: '',
-      styles: cellStyles,
+      cellData: 'check',
+      styles: {
+        ...cellStyles,
+        border: {
+          ...cellStyles.border,
+          left: {
+            style: 'thin',
+            color: {
+              argb: '00FFFFFF',
+            },
+          },
+        },
+      },
     });
     /* Row 14 & 15 end*/
 
