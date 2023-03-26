@@ -12,7 +12,7 @@ export class AppComponent {
   constructor(private excelService: ExcelService) {}
 
   downloadExcel() {
-    const data: any = [];
+    const data: any = {};
     this.excelService.download(data);
   }
 }
