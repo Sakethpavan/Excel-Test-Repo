@@ -4,7 +4,7 @@ import { ExcelService } from './excel-service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'excel-generator';
@@ -12,6 +12,7 @@ export class AppComponent {
   constructor(private excelService: ExcelService) {}
 
   downloadExcel() {
-    this.excelService.download(); 
+    const data: any = [];
+    this.excelService.download(data);
   }
 }
