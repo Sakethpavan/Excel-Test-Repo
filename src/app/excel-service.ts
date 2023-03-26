@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Cell, Row, Workbook, Worksheet } from 'exceljs';
 import * as fs from 'file-saver';
-import { convertToOperationSheetData, createCell } from './excel.helper';
-import { ExcelProperties, StandardOperationSheetData } from './excel.type';
+import { convertToOperationSheetData, createCell, formatData } from './excel.helper';
+import { ExcelProperties, OperationStepDetail, StandardOperationSheetData } from './excel.type';
 import {
   cellStyles,
   centerAlignedCellStyles,
@@ -758,12 +758,12 @@ export class ExcelService {
     /* Row 14 & 15 end*/
 
     /* Row 16 */
-    this.generateTable(worksheet);
+    this.generateTable(worksheet, operationSheetData.operationStepDetails);
     /* Row 16 end*/
     this.downloadFile(workbook, excelProperties.fileName);
   }
 
-  generateTable(worksheet: Worksheet, data?: any) {
+  generateTable(worksheet: Worksheet, data: OperationStepDetail[]) {
     worksheet.mergeCells('B16:F16');
     worksheet.mergeCells('H16:L16');
     worksheet.mergeCells('M16:AA16');
@@ -807,40 +807,17 @@ export class ExcelService {
       styles: tableHeaderCellStyles,
     });
 
-    data = [
-      {
-        no: 1,
-        steps: '1234',
-        time: '10:20',
-        keyPoints: 'this is also reason',
-        routes: 'route1,route32',
-      },
-      {
-        no: 2,
-        steps: '12335',
-        time: '10:50',
-        keyPoints: 'this is also reason',
-        routes: 'route21,route32',
-      },
-    ];
-
     data.forEach(
       (
-        rowData: {
-          no: number;
-          steps: string;
-          time: string;
-          keyPoints: string;
-          routes: string;
-        },
+        rowData: OperationStepDetail,
         index: number
       ) => {
         const newRowValues = [];
         newRowValues['A'.charCodeAt(0) - '@'.charCodeAt(0)] = index + 1;
-        newRowValues['B'.charCodeAt(0) - '@'.charCodeAt(0)] = rowData.steps;
-        newRowValues['G'.charCodeAt(0) - '@'.charCodeAt(0)] = rowData.time;
-        newRowValues['H'.charCodeAt(0) - '@'.charCodeAt(0)] = rowData.keyPoints;
-        newRowValues['M'.charCodeAt(0) - '@'.charCodeAt(0)] = rowData.routes;
+        newRowValues['B'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(rowData.stepDescription);
+        newRowValues['G'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(rowData.stepTime);
+        newRowValues['H'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(rowData.keyPoint);
+        newRowValues['M'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(rowData.operationAnalysis);
         const row: Row = worksheet.addRow(newRowValues);
         worksheet.mergeCells(`B${row.number}:F${row.number}`);
         worksheet.mergeCells(`H${row.number}:L${row.number}`);

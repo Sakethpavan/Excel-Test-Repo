@@ -37,7 +37,7 @@ export const convertToOperationSheetData = (data: any): StandardOperationSheetDa
 };
 
 // checks if data is avaiable or not 
-function formatData<T>(value: T | undefined | null): T | string {
+export function formatData<T>(value: T | undefined | null): T | string {
   if (value == null || value == undefined) 
     return '';
   return value;

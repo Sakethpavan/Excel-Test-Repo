@@ -3,7 +3,7 @@ import { Style, Worksheet } from 'exceljs';
 export type CellProperties = {
   worksheet: Worksheet;
   cellLocation: string;
-  cellData: string;
+  cellData: any;
   styles?: Partial<Style>;
 };
 
@@ -16,12 +16,12 @@ export type StandardOperationSheetData = {
   ppeRequirements: string;
   significantHazard: string;
   materialsUsed: string; // mapping to materials Required
-  operationStepDetails: OperationStep[];
+  operationStepDetails: OperationStepDetail[];
   preparedBy: string;
   appliedModel: string;
 };
 
-export type OperationStep = {
+export type OperationStepDetail = {
   stepid: string;
   stepSequence: number;
   stepDescription: string;
