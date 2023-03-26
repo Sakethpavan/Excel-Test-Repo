@@ -24,6 +24,13 @@ export const thinBlackBorderStyle: Partial<Border> = {
   },
 };
 
+export const thinWhiteBorderStyle: Partial<Border> = {
+  style:'thin',
+  color: {
+    argb: 'FFFFFFFF',
+  },
+}
+
 export const cellStyles: Partial<Style> = {
   font: {
     name: 'Arial',
@@ -71,3 +78,17 @@ export const tableHeaderCellStyles: Partial<Style> = {
   },
 };
 
+export const tableValueCellStyles: Partial<Style> = {
+  ...tableHeaderCellStyles,
+  font: {
+    name: 'Arial',
+    size: 14,
+    bold: false,
+  },
+  border: {
+    top: thinWhiteBorderStyle,
+    left: thinBlackBorderStyle,
+    bottom: thinWhiteBorderStyle,
+    right: thinBlackBorderStyle,
+  },
+};

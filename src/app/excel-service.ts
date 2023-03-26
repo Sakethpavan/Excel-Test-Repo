@@ -1,64 +1,58 @@
 import { Injectable } from '@angular/core';
-import { Border, Cell, Style, Workbook, Worksheet } from 'exceljs';
+import { Cell, Row, Workbook, Worksheet } from 'exceljs';
 import * as fs from 'file-saver';
+import { convertToOperationSheetData, createCell } from './excel.helper';
+import { ExcelProperties, StandardOperationSheetData } from './excel.type';
 import {
   cellStyles,
   centerAlignedCellStyles,
   rightAlignedCellStyles,
   tableHeaderCellStyles,
+  tableValueCellStyles,
   titleStyles,
 } from './styles-helper';
-type CellProperties = {
-  worksheet: Worksheet;
-  cellLocation: string;
-  cellData: string;
-  styles?: Partial<Style>;
-};
+
 @Injectable({
   providedIn: 'root',
 })
 export class ExcelService {
   constructor() {}
 
-  download() {
-    this.customExcel();
+  download(data: any) {
+    const operationSheetData: StandardOperationSheetData =
+      convertToOperationSheetData(data);
+    this.customExcel(operationSheetData, {
+      worksheetName: 'Test',
+      fileName: 'Sample',
+    });
   }
 
-  createCell({
-    worksheet,
-    cellLocation,
-    cellData,
-    styles,
-  }: CellProperties): Cell {
-    const cell: Cell = worksheet.getCell(cellLocation);
-    cell.value = cellData;
-    if (styles) {
-      Object.entries(styles).forEach(([styleName, styleValue]) => {
-        (cell as any)[styleName] = styleValue;
-      });
-    }
-    return cell;
-  }
-
-  generateTitle(worksheet: Worksheet) {
+  generateTitle(worksheet: Worksheet, title: string) {
     worksheet.mergeCells('A1:AA3');
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'A1',
-      cellData: 'Standard Operation Sheet - Procedure',
+      cellData: title,
       styles: titleStyles,
     });
   }
-  async customExcel() {
+
+  async customExcel(
+    operationSheetData: StandardOperationSheetData,
+    excelProperties: ExcelProperties
+  ) {
     const workbook: Workbook = new Workbook();
-    const worksheet: Worksheet = workbook.addWorksheet('Test', {
-      pageSetup: {
-        showGridLines: false,
-      },
-    });
+    const worksheet: Worksheet = workbook.addWorksheet(
+      excelProperties.worksheetName,
+      {
+        pageSetup: {
+          showGridLines: false,
+        },
+      }
+    );
 
     // Row 1 to 3 title
-    this.generateTitle(worksheet);
+    this.generateTitle(worksheet, 'Standard Operation Sheet - Procedure');
 
     /* Row 4 and Row 5 */
     worksheet.mergeCells('A4:C5');
@@ -77,104 +71,104 @@ export class ExcelService {
     worksheet.mergeCells('X5:Y5');
     worksheet.mergeCells('Z5:AA5');
 
-    // Operator Number Cell
-    this.createCell({
+    // Operation Number Cell
+    createCell({
       worksheet,
       cellLocation: 'A4',
-      cellData: 'Operator Number',
+      cellData: 'Operation Number',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'D4',
-      cellData: '1000',
+      cellData: operationSheetData.operationNumber,
       styles: cellStyles,
     });
 
     // Primary or Secondary Cell
     worksheet.getColumn(12).width = 21.36;
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'L4',
       cellData: 'Primary or Secondary',
       styles: centerAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'L5',
-      cellData: '',
+      cellData: operationSheetData.primarySecondarySos,
       styles: cellStyles,
     });
 
     // Prepared By Cell
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'R4',
       cellData: 'Prepared By',
       styles: centerAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'T4',
-      cellData: 'Saketh pavan',
+      cellData: operationSheetData.preparedBy,
       styles: cellStyles,
     });
 
     // Applied Model Cell
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'V4',
       cellData: 'Applied Model',
       styles: centerAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'X4',
-      cellData: '',
+      cellData: operationSheetData.appliedModel,
       styles: cellStyles,
     });
 
     // Revision Date
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'N5',
       cellData: 'Revision Date',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'R5',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'T5',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'V5',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'X5',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Z5',
       cellData: '',
@@ -201,73 +195,73 @@ export class ExcelService {
     worksheet.mergeCells('Z6:AA6');
     worksheet.mergeCells('Z7:AA7');
 
-    // Operator Description
-    this.createCell({
+    // Operatrion Description
+    createCell({
       worksheet,
       cellLocation: 'A6',
-      cellData: 'Operator Description',
+      cellData: 'Operation Description',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'D6',
-      cellData: '',
+      cellData: operationSheetData.operationDescription,
       styles: cellStyles,
     });
 
     // Time to Master
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'K6',
       cellData: 'Time to Master',
       styles: centerAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'L6',
-      cellData: '',
+      cellData: operationSheetData.timeToMaster,
       styles: cellStyles,
     });
 
     // Issue Number
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'N6',
       cellData: 'Issue Number',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'R6',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'T6',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'V6',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'X6',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Z6',
       cellData: '',
@@ -275,42 +269,42 @@ export class ExcelService {
     });
 
     // Revision Detail
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'N7',
       cellData: 'Revision Detail',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'R7',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'T7',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'V7',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'X7',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Z7',
       cellData: '',
@@ -335,57 +329,57 @@ export class ExcelService {
     worksheet.mergeCells('Z8:AA8');
     worksheet.mergeCells('Z9:AA9');
     // PPE Requirements
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'A8',
       cellData: 'PPE Requirements',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'D8',
-      cellData: '',
+      cellData: operationSheetData.ppeRequirements,
       styles: cellStyles,
     });
 
     // Senior Supervisor (1)
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'O8',
       cellData: 'Senior Supervisor (1)',
       styles: centerAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'R8',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'T8',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'V8',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'X8',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Z8',
       cellData: '',
@@ -393,42 +387,42 @@ export class ExcelService {
     });
 
     // Senior Supervisor (2)
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'O9',
       cellData: 'Senior Supervisor (2)',
       styles: centerAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'R9',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'T9',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'V9',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'X9',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Z9',
       cellData: '',
@@ -452,14 +446,14 @@ export class ExcelService {
     worksheet.mergeCells('Z10:AA10');
     worksheet.mergeCells('Z11:AA11');
     // Jigs / Tools / Facility
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'A10',
       cellData: 'Jigs / Tools / Facility',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'D10',
       cellData: '',
@@ -467,49 +461,49 @@ export class ExcelService {
     });
 
     // Supervisor (1)
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'O10',
       cellData: 'Supervisor',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Q10',
       cellData: '(1)',
       styles: centerAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'R10',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'T10',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'V10',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'X10',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Z10',
       cellData: '',
@@ -517,49 +511,49 @@ export class ExcelService {
     });
 
     // Supervisor (2)
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'O11',
       cellData: 'Supervisor',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Q11',
       cellData: '(2)',
       styles: centerAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'R11',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'T11',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'V11',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'X11',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Z11',
       cellData: '',
@@ -584,64 +578,64 @@ export class ExcelService {
     worksheet.mergeCells('Z12:AA12');
     worksheet.mergeCells('Z13:AA13');
     // Significant Hazards
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'A12',
       cellData: 'Significant Hazards',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'D12',
-      cellData: '',
+      cellData: operationSheetData.significantHazard,
       styles: cellStyles,
     });
 
     // Supervisor (3)
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'O12',
       cellData: 'Supervisor',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Q12',
       cellData: '(3)',
       styles: centerAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'R12',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'T12',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'V12',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'X12',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Z12',
       cellData: '',
@@ -649,49 +643,49 @@ export class ExcelService {
     });
 
     // Supervisor (4)
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'O13',
       cellData: 'Supervisor',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Q13',
       cellData: '(4)',
       styles: centerAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'R13',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'T13',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'V13',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'X13',
       cellData: '',
       styles: cellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'Z13',
       cellData: '',
@@ -705,22 +699,22 @@ export class ExcelService {
     worksheet.mergeCells('D14:M15');
     worksheet.mergeCells('O14:AA15');
     // Materials Used
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'A14',
       cellData: 'Materials Used',
       styles: rightAlignedCellStyles,
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'D14',
-      cellData: '',
+      cellData: operationSheetData.materialsUsed,
       styles: cellStyles,
     });
 
     // Revision signatory
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'N8',
       cellData: 'Revision signatory',
@@ -744,7 +738,7 @@ export class ExcelService {
       },
     });
 
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'O14',
       cellData: '',
@@ -766,12 +760,7 @@ export class ExcelService {
     /* Row 16 */
     this.generateTable(worksheet);
     /* Row 16 end*/
-    workbook.xlsx.writeBuffer().then((data: any) => {
-      const blob = new Blob([data], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
-      fs.saveAs(blob, 'Client.xlsx');
-    });
+    this.downloadFile(workbook, excelProperties.fileName);
   }
 
   generateTable(worksheet: Worksheet, data?: any) {
@@ -779,7 +768,7 @@ export class ExcelService {
     worksheet.mergeCells('H16:L16');
     worksheet.mergeCells('M16:AA16');
     // No
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'A16',
       cellData: 'No',
@@ -787,7 +776,7 @@ export class ExcelService {
     });
 
     // Main Steps
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'B16',
       cellData: 'Main Steps',
@@ -795,7 +784,7 @@ export class ExcelService {
     });
 
     // Time
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'G16',
       cellData: 'Time',
@@ -803,7 +792,7 @@ export class ExcelService {
     });
 
     // Key Points and (Reasons)
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'H16',
       cellData: 'Key Points and (Reasons)',
@@ -811,11 +800,65 @@ export class ExcelService {
     });
 
     // Operation Routes \ Illustrations \ Specifications
-    this.createCell({
+    createCell({
       worksheet,
       cellLocation: 'M16',
       cellData: 'Operation Routes \\ Illustrations \\ Specifications',
       styles: tableHeaderCellStyles,
+    });
+
+    data = [
+      {
+        no: 1,
+        steps: '1234',
+        time: '10:20',
+        keyPoints: 'this is also reason',
+        routes: 'route1,route32',
+      },
+      {
+        no: 2,
+        steps: '12335',
+        time: '10:50',
+        keyPoints: 'this is also reason',
+        routes: 'route21,route32',
+      },
+    ];
+
+    data.forEach(
+      (
+        rowData: {
+          no: number;
+          steps: string;
+          time: string;
+          keyPoints: string;
+          routes: string;
+        },
+        index: number
+      ) => {
+        const newRowValues = [];
+        newRowValues['A'.charCodeAt(0) - '@'.charCodeAt(0)] = index + 1;
+        newRowValues['B'.charCodeAt(0) - '@'.charCodeAt(0)] = rowData.steps;
+        newRowValues['G'.charCodeAt(0) - '@'.charCodeAt(0)] = rowData.time;
+        newRowValues['H'.charCodeAt(0) - '@'.charCodeAt(0)] = rowData.keyPoints;
+        newRowValues['M'.charCodeAt(0) - '@'.charCodeAt(0)] = rowData.routes;
+        const row: Row = worksheet.addRow(newRowValues);
+        worksheet.mergeCells(`B${row.number}:F${row.number}`);
+        worksheet.mergeCells(`H${row.number}:L${row.number}`);
+        worksheet.mergeCells(`M${row.number}:AA${row.number}`);
+
+        row.eachCell((cell: Cell) => {
+          cell.style = tableValueCellStyles;
+        });
+      }
+    );
+  }
+
+  async downloadFile(workbook: Workbook, outputFileName: string) {
+    workbook.xlsx.writeBuffer().then((data: any) => {
+      const blob = new Blob([data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      fs.saveAs(blob, outputFileName);
     });
   }
 }
