@@ -43,4 +43,4 @@ export function formatData<T>(value: T | undefined | null): T | string {
   return value;
 }
 
-
+export const base64Img = '';

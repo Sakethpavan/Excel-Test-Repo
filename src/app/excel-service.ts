@@ -1,8 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Cell, Row, Workbook, Worksheet } from 'exceljs';
 import * as fs from 'file-saver';
-import { convertToOperationSheetData, createCell, formatData } from './excel.helper';
-import { ExcelProperties, OperationStepDetail, StandardOperationSheetData } from './excel.type';
+import {
+  base64Img,
+  convertToOperationSheetData,
+  createCell,
+  formatData,
+} from './excel.helper';
+import {
+  ExcelProperties,
+  OperationStepDetail,
+  StandardOperationSheetData,
+} from './excel.type';
 import {
   cellStyles,
   centerAlignedCellStyles,
@@ -47,12 +56,30 @@ export class ExcelService {
       {
         pageSetup: {
           showGridLines: false,
+          firstPageNumber: 1,
+          orientation: 'landscape',
+          paperSize: 9,
+          fitToPage: true,
+        },
+        properties: {
+          showGridLines: false,
         },
       }
     );
 
     // Row 1 to 3 title
     this.generateTitle(worksheet, 'Standard Operation Sheet - Procedure');
+
+    // Logo
+    const logo = workbook.addImage({
+      base64: base64Img,
+      extension: 'png',
+    });
+
+    worksheet.addImage(logo, {
+      tl: { col: 23.5, row: 0.5 },
+      br: { col: 26.5, row: 2.5 },
+    });
 
     /* Row 4 and Row 5 */
     worksheet.mergeCells('A4:C5');
@@ -807,27 +834,30 @@ export class ExcelService {
       styles: tableHeaderCellStyles,
     });
 
-    data.forEach(
-      (
-        rowData: OperationStepDetail,
-        index: number
-      ) => {
-        const newRowValues = [];
-        newRowValues['A'.charCodeAt(0) - '@'.charCodeAt(0)] = index + 1;
-        newRowValues['B'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(rowData.stepDescription);
-        newRowValues['G'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(rowData.stepTime);
-        newRowValues['H'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(rowData.keyPoint);
-        newRowValues['M'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(rowData.operationAnalysis);
-        const row: Row = worksheet.addRow(newRowValues);
-        worksheet.mergeCells(`B${row.number}:F${row.number}`);
-        worksheet.mergeCells(`H${row.number}:L${row.number}`);
-        worksheet.mergeCells(`M${row.number}:AA${row.number}`);
+    data.forEach((rowData: OperationStepDetail, index: number) => {
+      const newRowValues = [];
+      newRowValues['A'.charCodeAt(0) - '@'.charCodeAt(0)] = index + 1;
+      newRowValues['B'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(
+        rowData.stepDescription
+      );
+      newRowValues['G'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(
+        rowData.stepTime
+      );
+      newRowValues['H'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(
+        rowData.keyPoint
+      );
+      newRowValues['M'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(
+        rowData.operationAnalysis
+      );
+      const row: Row = worksheet.addRow(newRowValues);
+      worksheet.mergeCells(`B${row.number}:F${row.number}`);
+      worksheet.mergeCells(`H${row.number}:L${row.number}`);
+      worksheet.mergeCells(`M${row.number}:AA${row.number}`);
 
-        row.eachCell((cell: Cell) => {
-          cell.style = tableValueCellStyles;
-        });
-      }
-    );
+      row.eachCell((cell: Cell) => {
+        cell.style = tableValueCellStyles;
+      });
+    });
   }
 
   async downloadFile(workbook: Workbook, outputFileName: string) {
