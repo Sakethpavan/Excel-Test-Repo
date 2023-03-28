@@ -12,13 +12,15 @@ export type StandardOperationSheetData = {
   operationNumber: string;
   primarySecondarySos: string;
   operationDescription: string;
-  timeToMaster: string; // mapping of duration
+  timeToMaster: string;
   ppeRequirements: string;
+  tools: string;
   significantHazard: string;
-  materialsUsed: string; // mapping to materials Required
+  materialsUsed: string;
   operationStepDetails: OperationStepDetail[];
   preparedBy: string;
   appliedModel: string;
+  total: string;
 };
 
 export type OperationStepDetail = {

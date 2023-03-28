@@ -18,28 +18,31 @@ export const createCell = ({
   return cell;
 };
 
-export const convertToOperationSheetData = (data: any): StandardOperationSheetData => {
+export const convertToOperationSheetData = (
+  data: any
+): StandardOperationSheetData => {
   const operationData: StandardOperationSheetData = {
     operationId: formatData<string>(data.operationId),
     operationNumber: formatData<string>(data.operationNumber),
     primarySecondarySos: formatData<string>(data.primarySecondarySos),
     operationDescription: formatData<string>(data.operationDescription),
-    timeToMaster: formatData<string>(data.duration), // mapping of duration
+    timeToMaster: formatData<string>(''),
+    tools: formatData<string>(data.toolsRequired),
     ppeRequirements: formatData<string>(data.ppeRequirements),
     significantHazard: formatData<string>(data.significantHazard),
-    materialsUsed: formatData<string>(data.materialRequired), // mapping to materials Required
+    materialsUsed: formatData<string>(data.materialsRequired), // mapping to materials Required
     operationStepDetails: data.operationStepDetails, // OperationStep[]
     preparedBy: formatData<string>(data.preparedBy),
     appliedModel: formatData<string>(data.appliedModel),
-  }
+    total: formatData<string>(data.duration),
+  };
 
   return operationData;
 };
 
-// checks if data is avaiable or not 
+// checks if data is avaiable or not
 export function formatData<T>(value: T | undefined | null): T | string {
-  if (value == null || value == undefined) 
-    return '';
+  if (value == null || value == undefined) return '';
   return value;
 }
 

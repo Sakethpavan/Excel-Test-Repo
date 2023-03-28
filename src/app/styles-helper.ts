@@ -25,11 +25,11 @@ export const thinBlackBorderStyle: Partial<Border> = {
 };
 
 export const thinWhiteBorderStyle: Partial<Border> = {
-  style:'thin',
+  style: 'thin',
   color: {
     argb: 'FFFFFFFF',
   },
-}
+};
 
 export const cellStyles: Partial<Style> = {
   font: {
@@ -90,5 +90,26 @@ export const tableValueCellStyles: Partial<Style> = {
     left: thinBlackBorderStyle,
     bottom: thinWhiteBorderStyle,
     right: thinBlackBorderStyle,
+  },
+};
+
+export const tableFooterCenterAlignedStyles: Partial<Style> = {
+  ...tableHeaderCellStyles,
+  font: {
+    name: 'Arial',
+    size: 14,
+    bold: true,
+  },
+  alignment: {
+    vertical: 'middle',
+    horizontal: 'center',
+  },
+};
+
+export const tableFooterRightAlignedStyles: Partial<Style> = {
+  ...tableFooterCenterAlignedStyles,
+  alignment: {
+    vertical: 'middle',
+    horizontal: 'right',
   },
 };

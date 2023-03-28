@@ -16,6 +16,8 @@ import {
   cellStyles,
   centerAlignedCellStyles,
   rightAlignedCellStyles,
+  tableFooterCenterAlignedStyles,
+  tableFooterRightAlignedStyles,
   tableHeaderCellStyles,
   tableValueCellStyles,
   titleStyles,
@@ -483,7 +485,7 @@ export class ExcelService {
     createCell({
       worksheet,
       cellLocation: 'D10',
-      cellData: '',
+      cellData: operationSheetData.tools,
       styles: cellStyles,
     });
 
@@ -785,12 +787,20 @@ export class ExcelService {
     /* Row 14 & 15 end*/
 
     /* Row 16 */
-    this.generateTable(worksheet, operationSheetData.operationStepDetails);
+    this.generateTable(
+      worksheet,
+      operationSheetData.operationStepDetails,
+      operationSheetData.total
+    );
     /* Row 16 end*/
     this.downloadFile(workbook, excelProperties.fileName);
   }
 
-  generateTable(worksheet: Worksheet, data: OperationStepDetail[]) {
+  generateTable(
+    worksheet: Worksheet,
+    data: OperationStepDetail[],
+    total: string
+  ) {
     worksheet.mergeCells('B16:F16');
     worksheet.mergeCells('H16:L16');
     worksheet.mergeCells('M16:AA16');
@@ -834,9 +844,10 @@ export class ExcelService {
       styles: tableHeaderCellStyles,
     });
 
-    data.forEach((rowData: OperationStepDetail, index: number) => {
+    // table data
+    data.forEach((rowData: OperationStepDetail) => {
       const newRowValues = [];
-      newRowValues['A'.charCodeAt(0) - '@'.charCodeAt(0)] = index + 1;
+      newRowValues['A'.charCodeAt(0) - '@'.charCodeAt(0)] = rowData.stepSequence;
       newRowValues['B'.charCodeAt(0) - '@'.charCodeAt(0)] = formatData(
         rowData.stepDescription
       );
@@ -857,6 +868,119 @@ export class ExcelService {
       row.eachCell((cell: Cell) => {
         cell.style = tableValueCellStyles;
       });
+    });
+
+    // total
+    const totalRow = worksheet.addRow([]);
+    worksheet.mergeCells(`B${totalRow.number}:F${totalRow.number}`);
+    worksheet.mergeCells(`H${totalRow.number}:L${totalRow.number}`);
+    worksheet.mergeCells(`M${totalRow.number}:AA${totalRow.number}`);
+    createCell({
+      worksheet,
+      cellLocation: `B${totalRow.number}`,
+      cellData: 'Total',
+      styles: tableHeaderCellStyles,
+    });
+    totalRow.eachCell({ includeEmpty: true }, (cell: Cell, colNo: number) => {
+      if (colNo == 7) cell.style = tableFooterCenterAlignedStyles;
+      else if (colNo >= 13) cell.style = tableValueCellStyles;
+      else cell.style = tableFooterRightAlignedStyles;
+    });
+    createCell({
+      worksheet,
+      cellLocation: `G${totalRow.number}`,
+      cellData: total,
+    });
+
+    // other relevant information
+    const relevantInfoRow = worksheet.addRow([]);
+    worksheet.mergeCells(
+      `A${relevantInfoRow.number}:L${relevantInfoRow.number}`
+    );
+    worksheet.mergeCells(
+      `M${relevantInfoRow.number}:AA${relevantInfoRow.number}`
+    );
+    relevantInfoRow.eachCell(
+      { includeEmpty: true },
+      (cell: Cell, colNo: number) => {
+        if (colNo >= 13) cell.style = tableValueCellStyles;
+      }
+    );
+    createCell({
+      worksheet,
+      cellLocation: `A${relevantInfoRow.number}`,
+      cellData:
+        'Other relevant information (What is forbidden and why / what to do in case of issue / others)',
+      styles: tableHeaderCellStyles,
+    });
+
+    const relevantInfoValueRow = worksheet.addRow([]);
+    worksheet.mergeCells(
+      `A${relevantInfoValueRow.number}:L${relevantInfoValueRow.number + 3}`
+    );
+
+    createCell({
+      worksheet,
+      cellLocation: `A${relevantInfoValueRow.number}`,
+      cellData: '',
+      styles: tableHeaderCellStyles,
+    });
+    for (
+      let row = relevantInfoValueRow.number;
+      row <= relevantInfoValueRow.number + 3;
+      row++
+    ) {
+      const targetRow = worksheet.findRow(row);
+      if (targetRow) {
+        worksheet.mergeCells(
+          `M${targetRow.number}:AA${targetRow.number}`
+        );
+        targetRow.eachCell(
+          { includeEmpty: true },
+          (cell: Cell, colNo: number) => {
+            if (colNo >= 13) cell.style = tableValueCellStyles;
+          }
+        );
+      }
+    }
+
+    // Page No. Row
+    const pageNoRow = worksheet.addRow([]);
+    worksheet.mergeCells(`A${pageNoRow.number}:W${pageNoRow.number}`);
+    // Page
+    createCell({
+      worksheet,
+      cellLocation: `A${pageNoRow.number}`,
+      cellData: '',
+      styles: tableHeaderCellStyles,
+    });
+    // Page
+    createCell({
+      worksheet,
+      cellLocation: `X${pageNoRow.number}`,
+      cellData: 'Page',
+      styles: tableFooterRightAlignedStyles,
+    });
+    // start Page
+    createCell({
+      worksheet,
+      cellLocation: `Y${pageNoRow.number}`,
+      cellData: '1',
+      styles: tableFooterRightAlignedStyles,
+    });
+    // of
+    createCell({
+      worksheet,
+      cellLocation: `Z${pageNoRow.number}`,
+      cellData: 'of',
+      styles: tableFooterCenterAlignedStyles,
+    });
+    // end Page
+    createCell({
+      worksheet,
+      cellLocation: `AA${pageNoRow.number}`,
+      cellData: '',
+      styles: tableFooterRightAlignedStyles,
     });
   }
 
