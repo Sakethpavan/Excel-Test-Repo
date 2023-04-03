@@ -80,7 +80,7 @@ export class ExcelService {
 
     worksheet.addImage(logo, {
       tl: { col: 23.5, row: 0.5 },
-      br: { col: 26.5, row: 2.5 },
+      ext: { width: 26.5, height: 2.5 },
     });
 
     /* Row 4 and Row 5 */
